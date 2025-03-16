@@ -15,3 +15,12 @@ GtkBuilder* load_ui(const char* ui){
 GObject* get_object(GtkBuilder* builder, const char* id){
 	return gtk_builder_get_object(builder, id);
 }
+
+void load_css(GtkWidget *widget, char *css){
+	GtkCssProvider *provider = gtk_css_provider_new();
+	gtk_css_provider_load_from_resource(provider, css);
+	gtk_style_context_add_provider_for_display(gtk_widget_get_display(widget),
+			GTK_STYLE_PROVIDER(provider),
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+
