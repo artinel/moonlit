@@ -5,4 +5,8 @@
 		<file preprocess="xml-stripblanks" alias="splash">ui/splash.ui</file>
 	</gresource>
 
+	<gresource prefix="/css">
+		<file alias="global-style">ui/css/style.css</file>
+	</gresource>
+
 </gresources>
