@@ -51,6 +51,30 @@
 
 				</object>
 			</child>
+
+
+			<child>
+				<object class="GtkBox">
+					<property name="orientation">vertical</property>
+					<property name="valign">GTK_ALIGN_CENTER</property>
+					<child>
+						<object class="GtkImage">
+							<property name="resource">/image/splash-logo</property>
+							<property name="pixel-size">600</property>
+						</object>
+					</child>
+					<child>
+						<object class="AdwSpinner">
+							<property name="halign">GTK_ALIGN_END</property>
+							<property name="valign">GTK_ALIGN_END</property>
+							<property name="width-request">60</property>
+							<property name="height-request">60</property>
+						</object>
+					</child>
+				</object>
+			</child>
+
+
 		</object>
 	</property>
 </object>

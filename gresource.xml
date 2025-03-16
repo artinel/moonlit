@@ -9,4 +9,8 @@
 		<file alias="global-style">ui/css/style.css</file>
 	</gresource>
 
+	<gresource prefix="/image">
+		<file alias="splash-logo">ui/image/splash_logo.svg</file>
+	</gresource>
+
 </gresources>
