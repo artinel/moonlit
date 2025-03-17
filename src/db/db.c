@@ -22,7 +22,7 @@ static db_signal db_open(){
 		char* dir = malloc(256);
 		sprintf(dir, "%s%s", getenv("HOME"), DB_NAME);
 		if(sqlite3_open(dir, &db) == DB_SUCCESS){
-			db_state == DB_OPEN;
+			db_state = DB_OPEN;
 			free(dir);
 			return DB_SUCCESS;
 		}else{
@@ -37,7 +37,7 @@ static db_signal db_open(){
 static db_signal db_close(){
 	if(db_state == DB_OPEN){
 		if(sqlite3_close(db) == DB_SUCCESS){
-			db_state == DB_CLOSE;
+			db_state = DB_CLOSE;
 			return DB_SUCCESS;
 		}else{
 			db_err();
