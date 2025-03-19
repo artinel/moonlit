@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="AdwWindow" id="window">
+	<property name="default-width">1280</property>
+	<property name="default-height">720</property>
+	<property name="content">
+		<object class="AdwToolbarView">
+			<child type="top">
+				<object class="AdwHeaderBar"/>
+			</child>
+		</object>	
+	</property>
+</object>
+
+</interface>
