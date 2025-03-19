@@ -1,6 +1,6 @@
 SHELL = bash
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3 $(shell pkg-config --cflags --libs libadwaita-1) -I./src/include
+CFLAGS = -Wall -Wextra -Werror -O3 $(shell pkg-config --cflags --libs libadwaita-1 sqlite3) -I./src/include
 GRESOURCE_CONFIG = gresource.xml
 GRESOURCE_TARGET = src/resources.c
 TARGET = moonlit
