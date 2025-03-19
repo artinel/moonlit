@@ -3,8 +3,10 @@
 #include <stdlib.h>
 //local includes
 #include <db/db.h>
+#include <db/music_dir.h>
 
 #define DB_NAME "/.local/share/moonlit/data.db"
+#define SQL_BUFFER_SIZE 1024
 
 static sqlite3* db;
 static db_signal db_state = DB_CLOSE;
@@ -45,4 +47,28 @@ static db_signal db_close(){
 		}
 	}
 	return DB_CLOSE;
+}
+
+static char* db_sql_generator(char* base, ...){
+	va_list data;
+	va_start(data, base);
+	char* sql = malloc(SQL_BUFFER_SIZE);
+	vsprintf(sql, base, data);
+	va_end(data);
+	return sql;
+}
+
+void db_init(){
+	if(db_open() == DB_SUCCESS){
+		char* sql_music_dir = db_sql_generator(
+				"CREATE TABLE IF NOT EXISTS %s(%s INTEGER NOT NULL, \
+				 %s TEXT NOT NULL, PRIMARY KEY(%s));", 
+				MUSIC_DIR, MUSIC_DIR_ID, MUSIC_DIR_DIR, MUSIC_DIR_DIR);
+		
+		char* err;
+		if(sqlite3_exec(db, sql_music_dir, NULL, NULL, &err) != DB_SUCCESS){
+			fprintf(stderr, "Failed to initialize database : %s\n", err);
+		}
+		db_close();
+	}
 }
