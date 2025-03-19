@@ -10,6 +10,11 @@ void constructor(){
 	db_init();
 }
 
+__attribute__((destructor))
+void destructor(){
+	db_exit();
+}
+
 int main(int argc, char** argv){
 	AdwApplication* app = adw_application_new(APP_ID, G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(app, "activate", G_CALLBACK(splash_window_activate), NULL);

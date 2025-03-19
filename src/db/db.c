@@ -72,3 +72,11 @@ void db_init(){
 		db_close();
 	}
 }
+
+void db_exit(){
+	if(db_state == DB_OPEN){
+		if(!sqlite3_close(db) == DB_SUCCESS){
+			db_err();
+		}	
+	}
+}

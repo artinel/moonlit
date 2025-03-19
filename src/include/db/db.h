@@ -11,5 +11,6 @@ typedef enum{
 }db_signal;
 
 void db_init();
+void db_exit();
 
 #endif
