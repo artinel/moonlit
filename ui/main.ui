@@ -10,6 +10,208 @@
 			<child type="top">
 				<object class="AdwHeaderBar"/>
 			</child>
+			
+			<child type="bottom">
+				<object class="GtkBox">
+					<property name="orientation">horizontal</property>
+					<property name="spacing">20</property>
+					<property name="valign">GTK_ALIGN_CENTER</property>
+					<style>
+						<class name="_toolbar"/>
+					</style>
+					
+
+					<child>
+						<object class="GtkImage">
+							<property name="resource">/image/empty-music</property>
+							<property name="pixel-size">80</property>
+						</object>
+					</child>
+
+					<child>
+						<object class="GtkBox">
+							<property name="orientation">vertical</property>
+							<property name="spacing">5</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+
+							<child>
+								<object class="GtkLabel">
+									<property name="label">Unknown Title</property>
+									<property name="halign">GTK_ALIGN_START</property>
+									<style>
+										<class name="title-2"/>
+									</style>
+								</object>
+							</child>
+
+							<child>
+								<object class="GtkLabel">
+									<property name="label">Unknown Artist</property>
+									<property name="halign">GTK_ALIGN_START</property>
+									<style>
+										<class name="title-4"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+				
+					<child>
+						<object class="GtkButton">
+							<property name="halign">GTK_ALIGN_CENTER</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<property name="margin-start">50</property>
+							<style>
+								<class name="circular"/>
+								<class name="raised"/>
+							</style>
+							<child>
+								<object class="GtkImage">
+									<property name="resource">/icon/previous</property>
+									<property name="pixel-size">20</property>
+									<style>
+										<class name="_circular"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+
+					<child>
+						<object class="GtkButton">
+							<property name="halign">GTK_ALIGN_CENTER</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<style>
+								<class name="circular"/>
+								<class name="raises"/>
+								<class name="suggested-action"/>
+							</style>
+							<child>
+								<object class="GtkImage">
+									<property name="resource">/icon/play</property>
+									<property name="pixel-size">35</property>
+									<style>
+										<class name="_circular"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+
+					<child>
+						<object class="GtkButton">
+							<property name="halign">GTK_ALIGN_CENTER</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<style>
+								<class name="circular"/>
+								<class name="raised"/>
+							</style>
+							<child>
+								<object class="GtkImage">
+									<property name="resource">/icon/next</property>
+									<property name="pixel-size">20</property>
+									<style>
+										<class name="_circular"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+
+					<child>
+						<object class="GtkLabel">
+							<property name="label">00:00</property>
+							<property name="margin-start">30</property>
+							<style>
+								<class name="title-4"/>
+							</style>
+						</object>
+					</child>
+
+					<child>
+						<object class="GtkScale" id="prog">
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<property name="hexpand">TRUE</property>
+							<property name="show-fill-level">TRUE</property>
+							<property name="restrict-to-fill-level">FALSE</property>
+						</object>
+					</child>
+
+
+					<child>
+						<object class="GtkLabel">
+							<property name="label">00:00</property>
+							<style>
+								<class name="title-4"/>
+							</style>
+						</object>
+					</child>
+
+
+					<child>
+						<object class="GtkButton">
+							<property name="halign">GTK_ALIGN_CENTER</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<style>
+								<class name="circular"/>
+								<class name="raised"/>
+							</style>
+							<child>
+								<object class="GtkImage">
+									<property name="resource">/icon/sound</property>
+									<property name="pixel-size">20</property>
+									<style>
+										<class name="_circular"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+
+
+					<child>
+						<object class="GtkButton">
+							<property name="halign">GTK_ALIGN_CENTER</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<style>
+								<class name="circular"/>
+								<class name="raised"/>
+							</style>
+							<child>
+								<object class="GtkImage">
+									<property name="resource">/icon/repeat</property>
+									<property name="pixel-size">20</property>
+									<style>
+										<class name="_circular"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+					
+					<child>
+						<object class="GtkButton">
+							<property name="halign">GTK_ALIGN_CENTER</property>
+							<property name="valign">GTK_ALIGN_CENTER</property>
+							<property name="margin-end">10</property>
+							<style>
+								<class name="circular"/>
+								<class name="raised"/>
+							</style>
+							<child>
+								<object class="GtkImage">
+									<property name="resource">/icon/empty-like</property>
+									<property name="pixel-size">20</property>
+									<style>
+										<class name="_circular"/>
+									</style>
+								</object>
+							</child>
+						</object>
+					</child>
+				</object>
+			</child>
+
 		</object>	
 	</property>
 </object>

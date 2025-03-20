@@ -12,6 +12,16 @@
 
 	<gresource prefix="/image">
 		<file alias="splash-logo">ui/image/splash_logo.svg</file>
+		<file alias="empty-music">ui/image/empty_music.svg</file>
+	</gresource>
+
+	<gresource prefix="/icon">
+		<file alias="empty-like">ui/icon/empty_like.svg</file>
+		<file alias="previous">ui/icon/prev.svg</file>
+		<file alias="play">ui/icon/play.svg</file>
+		<file alias="next">ui/icon/next.svg</file>
+		<file alias="sound">ui/icon/sound.svg</file>
+		<file alias="repeat">ui/icon/repeat.svg</file>
 	</gresource>
 
 </gresources>

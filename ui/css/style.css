@@ -5,3 +5,12 @@
 ._title_xxl{
 	font-size: 100px;
 }
+
+._toolbar{
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+._circular{
+	margin: 10px;
+}
