@@ -14,3 +14,6 @@ compile-resources:
 
 compile: compile-resources
 	$(CC) $(CFLAGS) $(CSOURCES) -o moonlit
+
+clean:
+	rm $(TARGET)
