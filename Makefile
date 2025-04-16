@@ -17,3 +17,6 @@ compile: compile-resources
 
 clean:
 	rm $(TARGET)
+
+run:
+	./$(TARGET)
