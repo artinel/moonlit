@@ -10,7 +10,7 @@
 			<child type="top">
 				<object class="AdwHeaderBar">
 					<property name="show-start-title-buttons">false</property>
-					<property name="title-widget">
+					<child type="start">
 						<object class="GtkBox">
 							<property name="orientation">horizontal</property>
 							<property name="halign">GTK_ALIGN_START</property>
@@ -35,11 +35,8 @@
 										</child>
 								</object>
 							</child>
-
-
-
 						</object>
-					</property>
+					</child>
 				</object>
 			</child>
 			
