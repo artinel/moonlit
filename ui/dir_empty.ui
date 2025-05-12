@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="GtkBox" id="dir_empty">
+	<property name="orientation">vertical</property>
+	<property name="halign">GTK_ALIGN_CENTER</property>
+	<property name="valign">GTK_ALIGN_CENTER</property>
+	<property name="spacing">40</property>
+	<child>
+		<object class="GtkLabel">
+			<property name="label">No music directory found</property>
+			<style>
+				<class name="title-1"/>
+			</style>
+		</object>
+	</child>
+
+	<child>
+		<object class="GtkButton" id="add_directory">
+			<property name="label">Add Directory</property>
+			<property name="halign">GTK_ALIGN_CENTER</property>
+			<style>
+				<class name="title-2"/>
+				<class name="pill"/>
+				<class name="suggested-action"/>
+			</style>
+		</object>
+	</child>
+
+</object>
+
+</interface>

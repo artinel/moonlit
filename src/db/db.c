@@ -58,18 +58,27 @@ static char* db_sql_generator(char* base, ...){
 	return sql;
 }
 
+static void db_init_exec(const char* sql){
+	char* err;
+	if(sqlite3_exec(db, sql, NULL, NULL, &err) != DB_SUCCESS){
+		fprintf(stderr, "Failed to initialize database : %s\n", err);
+	}
+}
+
+static void db_close_err(){
+	fprintf(stderr, "Error : Database is closed!!!\n");
+}
+
 void db_init(){
 	if(db_open() == DB_SUCCESS){
 		char* sql_music_dir = db_sql_generator(
-				"CREATE TABLE IF NOT EXISTS %s(%s INTEGER NOT NULL, \
-				 %s TEXT NOT NULL, PRIMARY KEY(%s));", 
-				MUSIC_DIR, MUSIC_DIR_ID, MUSIC_DIR_DIR, MUSIC_DIR_DIR);
-		
-		char* err;
-		if(sqlite3_exec(db, sql_music_dir, NULL, NULL, &err) != DB_SUCCESS){
-			fprintf(stderr, "Failed to initialize database : %s\n", err);
-		}
-		db_close();
+				"CREATE TABLE IF NOT EXISTS %s(%s INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , \
+				 %s TEXT NOT NULL UNIQUE);", 
+				MUSIC_DIR, MUSIC_DIR_ID, MUSIC_DIR_DIR, MUSIC_DIR_ID);
+	
+		db_init_exec(sql_music_dir);	
+
+		free(sql_music_dir);
 	}
 }
 
@@ -78,5 +87,44 @@ void db_exit(){
 		if(!sqlite3_close(db) == DB_SUCCESS){
 			db_err();
 		}	
+	}
+}
+
+unsigned int db_table_count(const char* table){
+	if(db_state == DB_OPEN){
+		char* sql = db_sql_generator("SELECT COUNT(*) FROM %s;", table);
+		sqlite3_stmt* stmt = NULL;
+		sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+		sqlite3_step(stmt);
+		unsigned int res = sqlite3_column_int(stmt, 0);
+		sqlite3_finalize(stmt);
+		free(sql);
+		return res;
+	}else{
+		db_close_err();
+		return DB_FAILED;
+	}
+}
+
+db_signal db_music_dir_add(const char* path){
+	if(db_state == DB_OPEN){
+		char* sql = db_sql_generator("INSERT INTO %s(%s) VALUES(?);", MUSIC_DIR, MUSIC_DIR_DIR);
+		sqlite3_stmt* stmt = NULL;
+		sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+		sqlite3_bind_text(stmt, 1, (char*)path, -1, SQLITE_TRANSIENT);
+		int status = sqlite3_step(stmt);
+		db_err();
+		sqlite3_finalize(stmt);
+		free(sql);
+		if(status == DB_SUCCESS || status == 101){
+			return DB_SUCCESS;
+		}else if(status == 19){
+			return DB_EXISTS;
+		}else{
+			return DB_FAILED;
+		}
+	}else{
+		db_close_err();
+		return DB_FAILED;	
 	}
 }

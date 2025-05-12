@@ -24,3 +24,12 @@ void load_css(GtkWidget *widget, char *css){
 			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
+void show_alert_dialog(const char* title, const char* body, int mode, GObject* parent){
+	AdwDialog* dialog = adw_alert_dialog_new(title, body);
+	adw_alert_dialog_add_response(ADW_ALERT_DIALOG(dialog), "close", "Close");
+	adw_alert_dialog_set_response_appearance(ADW_ALERT_DIALOG(dialog), "close", 
+			(mode == 0) ? ADW_RESPONSE_DESTRUCTIVE : ADW_RESPONSE_SUGGESTED);
+	adw_alert_dialog_set_default_response(ADW_ALERT_DIALOG(dialog), "close");
+	adw_alert_dialog_set_close_response(ADW_ALERT_DIALOG(dialog), "close");
+	adw_dialog_present(ADW_DIALOG(dialog), GTK_WIDGET(parent));
+}

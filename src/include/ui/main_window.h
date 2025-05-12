@@ -4,5 +4,6 @@
 #include <libadwaita-1/adwaita.h>
 
 void main_window_activate(AdwApplication* app);
+void set_main_view(GObject* widget);
 
 #endif

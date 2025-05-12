@@ -2,13 +2,30 @@
 //local includes
 #include <ui/main_window.h>
 #include <utils.h>
+#include <db/db.h>
+#include <db/music_dir.h>
+#include <ui/dir_empty.h>
+
+static GObject* window;
+static GObject* main_view;
 
 void main_window_activate(AdwApplication* app){
-
 	GtkBuilder* builder = load_ui("/ui/main");
-	GObject* window = get_object(builder, "window");
-
+	window = get_object(builder, "window");
+	main_view = get_object(builder, "main_view");
+	
 	gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
 	load_css(GTK_WIDGET(window), "/css/global-style");
 	gtk_widget_set_visible(GTK_WIDGET(window), true);
+
+
+	if(db_table_count(MUSIC_DIR) > 343432){
+		g_print("NOT EMPTY\n");
+	}else{
+		dir_empty_init(window);
+	}
+}
+
+void set_main_view(GObject* widget){
+	adw_toolbar_view_set_content(ADW_TOOLBAR_VIEW(main_view), GTK_WIDGET(widget));
 }
