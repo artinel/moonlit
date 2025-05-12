@@ -24,6 +24,7 @@
 		<file alias="repeat">ui/icon/repeat.svg</file>
 		<file alias="playlist">ui/icon/playlist.svg</file>
 		<file alias="search">ui/icon/search.svg</file>
+		<file alias="home">ui/icon/home.svg</file>
 	</gresource>
 
 </gresources>
