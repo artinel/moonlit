@@ -9,12 +9,10 @@
 		<object class="AdwToolbarView">
 			<child type="top">
 				<object class="AdwHeaderBar">
-					<property name="show-start-title-buttons">false</property>
 					<child type="start">
 						<object class="GtkBox">
 							<property name="orientation">horizontal</property>
 							<property name="halign">GTK_ALIGN_START</property>
-							
 							<child>
 								<object class="GtkButton">
 									<property name="halign">GTK_ALIGN_CENTER</property>
@@ -35,6 +33,53 @@
 										</child>
 								</object>
 							</child>
+
+
+							<child>
+								<object class="GtkButton">
+									<property name="halign">GTK_ALIGN_CENTER</property>
+									<property name="valign">GTK_ALIGN_CENTER</property>
+									<property name="margin-end">10</property>
+									<style>
+										<class name="circular"/>
+										<class name="raised"/>
+									</style>
+										<child>
+											<object class="GtkImage">
+												<property name="resource">/icon/playlist</property>
+												<property name="pixel-size">20</property>
+												<style>
+													<class name="_circular"/>
+												</style>
+											</object>
+										</child>
+								</object>
+							</child>
+
+
+							<child>
+								<object class="GtkButton">
+									<property name="halign">GTK_ALIGN_CENTER</property>
+									<property name="valign">GTK_ALIGN_CENTER</property>
+									<property name="margin-end">10</property>
+									<style>
+										<class name="circular"/>
+										<class name="raised"/>
+									</style>
+										<child>
+											<object class="GtkImage">
+												<property name="resource">/icon/search</property>
+												<property name="pixel-size">20</property>
+												<style>
+													<class name="_circular"/>
+												</style>
+											</object>
+										</child>
+								</object>
+							</child>
+
+
+
 						</object>
 					</child>
 				</object>

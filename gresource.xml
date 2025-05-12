@@ -22,6 +22,8 @@
 		<file alias="next">ui/icon/next.svg</file>
 		<file alias="sound">ui/icon/sound.svg</file>
 		<file alias="repeat">ui/icon/repeat.svg</file>
+		<file alias="playlist">ui/icon/playlist.svg</file>
+		<file alias="search">ui/icon/search.svg</file>
 	</gresource>
 
 </gresources>
