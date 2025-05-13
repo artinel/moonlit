@@ -5,6 +5,7 @@
 #include <utils.h>
 #include <db/music.h>
 #include <db/music_dir.h>
+#include <ui/home.h>
 
 #define FILENAME_BUF_SIZE 512
 
@@ -18,6 +19,7 @@ static struct dir_thread{
 	char* ext;
 	int dir_id;
 	GObject* dialog;
+	GObject* parent;
 };
 
 
@@ -110,6 +112,7 @@ static void thread_dir_add(gpointer data){
 	struct dir_thread* dir = (struct dir_thread*) data;
 	dir_files_add_db(dir->path, dir->ext, dir->dir_id);
 	adw_dialog_force_close(ADW_DIALOG(dir->dialog));
+	home_init(dir->parent);
 }
 
 
@@ -127,6 +130,7 @@ static void show_dir_add_callback(GObject* src, GAsyncResult* res, gpointer data
 			dir_s->ext = "mp3";
 			dir_s->dir_id = dir_id;
 			dir_s->dialog = dialog;
+			dir_s->parent = parent;
 
 			GThread* thread = g_thread_new("add-thread", (GThreadFunc)thread_dir_add, dir_s);
 		}else if(res == DB_EXISTS){

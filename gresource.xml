@@ -6,6 +6,7 @@
 		<file preprocess="xml-stripblanks" alias="main">ui/main.ui</file>
 		<file preprocess="xml-stripblanks" alias="dir_empty">ui/dir_empty.ui</file>
 		<file preprocess="xml-stripblanks" alias="music_add_load">ui/music_add_load.ui</file>
+		<file preprocess="xml-stripblanks" alias="home">ui/home.ui</file>
 	</gresource>
 
 	<gresource prefix="/css">

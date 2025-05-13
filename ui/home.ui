@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="GtkScrolledWindow" id="home_view">
+	<property name="propagate-natural-height">TRUE</property>
+	<child>
+		<object class="GtkListBox" id="home_list">
+			<property name="selection-mode">GTK_SELECTION_NONE</property>
+		</object>
+	</child>
+</object>
+
+
+</interface>

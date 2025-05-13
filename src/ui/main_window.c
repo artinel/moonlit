@@ -5,6 +5,7 @@
 #include <db/db.h>
 #include <db/music_dir.h>
 #include <ui/dir_empty.h>
+#include <ui/home.h>
 
 static GObject* window;
 static GObject* main_view;
@@ -19,8 +20,8 @@ void main_window_activate(AdwApplication* app){
 	gtk_widget_set_visible(GTK_WIDGET(window), true);
 
 
-	if(db_table_count(MUSIC_DIR) > 343432){
-		g_print("NOT EMPTY\n");
+	if(db_table_count(MUSIC_DIR) > 0){
+		home_init(window);
 	}else{
 		dir_empty_init(window);
 	}
