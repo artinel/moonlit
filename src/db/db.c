@@ -4,6 +4,7 @@
 //local includes
 #include <db/db.h>
 #include <db/music_dir.h>
+#include <db/music.h>
 
 #define DB_NAME "/.local/share/moonlit/data.db"
 #define SQL_BUFFER_SIZE 1024
@@ -86,7 +87,14 @@ void db_init(){
 				 %s TEXT NOT NULL UNIQUE);", 
 				MUSIC_DIR, MUSIC_DIR_ID, MUSIC_DIR_DIR, MUSIC_DIR_ID);
 	
+
+		char* sql_music = db_sql_generator(
+				"CREATE TABLE IF NOT EXISTS %s(%s INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \
+				%s INTEGER NOT NULL, %s TEXT NOT NULL);",
+				MUSIC, MUSIC_ID, MUSIC_ID_DIR, MUSIC_PATH);
+
 		db_init_exec(sql_music_dir);	
+		db_init_exec(sql_music);
 
 		free(sql_music_dir);
 	}

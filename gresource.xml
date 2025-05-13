@@ -5,6 +5,7 @@
 		<file preprocess="xml-stripblanks" alias="splash">ui/splash.ui</file>
 		<file preprocess="xml-stripblanks" alias="main">ui/main.ui</file>
 		<file preprocess="xml-stripblanks" alias="dir_empty">ui/dir_empty.ui</file>
+		<file preprocess="xml-stripblanks" alias="music_add_load">ui/music_add_load.ui</file>
 	</gresource>
 
 	<gresource prefix="/css">
