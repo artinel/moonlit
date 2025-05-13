@@ -146,3 +146,34 @@ void show_dir_add_dialog(GObject* parent){
 	gtk_file_dialog_select_folder(dialog, GTK_WINDOW(parent), NULL, show_dir_add_callback, parent);
 }
 
+void parse_time(char* buffer, const double dur){
+	int time = (int)dur;
+	buffer[2] = ':';
+	int minute = 0;
+	
+	while(time >= 60){
+		time -= 60;
+		minute++;
+	}
+
+	if(minute < 10){
+		buffer[0] = '0';
+		buffer[1] = minute + '0';
+	}else{
+		char buf[4];
+		sprintf(buf, "%d", (unsigned char)minute);
+		buffer[0] = buf[0];
+		buffer[1] = buf[1];
+	}
+
+	if(time < 10){
+		buffer[3] = '0';
+		buffer[4] = time + '0';
+	}else{
+		char buf[4];
+		sprintf(buf, "%d", (unsigned char)time);
+		buffer[3] = buf[0];
+		buffer[4] = buf[1];
+	}
+
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="AdwActionRow" id="music_item">
+	<property name="title">Music Name</property>
+	<property name="subtitle">Artist name</property>
+	<style>
+		<class name="title-2"/>
+	</style>
+	<child type="suffix">
+		<object class="GtkLabel" id="duration">
+			<property name="label">04:23</property>
+		</object>
+	</child>
+</object>
+
+</interface>
