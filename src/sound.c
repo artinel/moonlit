@@ -1,10 +1,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include <stdio.h>
+#include <stdbool.h>
 //Local includes
 #include <sound.h>
 
 static Mix_Music* music;
+static bool is_playing = false;
 
 void sound_init(){
 	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
@@ -34,4 +36,23 @@ const char* sound_get_artist(){
 double sound_get_duration(){
 	double dur = Mix_MusicDuration(music);
 	return dur;
+}
+
+void sound_play(){
+	Mix_PlayMusic(music, 1);
+	is_playing = true;
+}
+
+void sound_pause(){
+	Mix_PauseMusic();
+	is_playing = false;
+}
+
+void sound_resume(){
+	Mix_ResumeMusic();
+	is_playing = true;
+}
+
+int sound_is_playing(){
+	return is_playing;
 }

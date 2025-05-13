@@ -7,5 +7,9 @@ void sound_set(const char* music_path);
 const char* sound_get_title();
 const char* sound_get_artist();
 double sound_get_duration();
+void sound_play();
+void sound_pause();
+void sound_resume();
+int sound_is_playing();
 
 #endif

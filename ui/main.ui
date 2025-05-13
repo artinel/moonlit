@@ -133,7 +133,7 @@
 							<property name="valign">GTK_ALIGN_CENTER</property>
 
 							<child>
-								<object class="GtkLabel">
+								<object class="GtkLabel" id="title">
 									<property name="label">Unknown Title</property>
 									<property name="halign">GTK_ALIGN_START</property>
 									<style>
@@ -143,7 +143,7 @@
 							</child>
 
 							<child>
-								<object class="GtkLabel">
+								<object class="GtkLabel" id="artist">
 									<property name="label">Unknown Artist</property>
 									<property name="halign">GTK_ALIGN_START</property>
 									<style>
@@ -155,7 +155,7 @@
 					</child>
 				
 					<child>
-						<object class="GtkButton">
+						<object class="GtkButton" id="previous">
 							<property name="halign">GTK_ALIGN_CENTER</property>
 							<property name="valign">GTK_ALIGN_CENTER</property>
 							<property name="margin-start">50</property>
@@ -176,7 +176,7 @@
 					</child>
 
 					<child>
-						<object class="GtkButton">
+						<object class="GtkButton" id="playpause">
 							<property name="halign">GTK_ALIGN_CENTER</property>
 							<property name="valign">GTK_ALIGN_CENTER</property>
 							<style>
@@ -185,7 +185,7 @@
 								<class name="suggested-action"/>
 							</style>
 							<child>
-								<object class="GtkImage">
+								<object class="GtkImage" id="playpause_image">
 									<property name="resource">/icon/play</property>
 									<property name="pixel-size">35</property>
 									<style>
@@ -197,7 +197,7 @@
 					</child>
 
 					<child>
-						<object class="GtkButton">
+						<object class="GtkButton" id="next">
 							<property name="halign">GTK_ALIGN_CENTER</property>
 							<property name="valign">GTK_ALIGN_CENTER</property>
 							<style>
@@ -227,7 +227,7 @@
 					</child>
 
 					<child>
-						<object class="GtkScale" id="prog">
+						<object class="GtkScale" id="progress_bar">
 							<property name="valign">GTK_ALIGN_CENTER</property>
 							<property name="hexpand">TRUE</property>
 							<property name="show-fill-level">TRUE</property>
@@ -237,7 +237,7 @@
 
 
 					<child>
-						<object class="GtkLabel">
+						<object class="GtkLabel" id="duration">
 							<property name="label">00:00</property>
 							<style>
 								<class name="title-4"/>
