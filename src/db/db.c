@@ -11,14 +11,6 @@
 static sqlite3* db;
 static db_signal db_state = DB_CLOSE;
 
-static void db_err(){
-	const char* err = sqlite3_errmsg(db);
-	int code = sqlite3_errcode(db);
-	if(err != NULL && code != 0){
-		fprintf(stderr, "Database error(%d) : %s\n", code, err);
-	}
-}
-
 static db_signal db_open(){
 	if(db_state == DB_CLOSE){
 		char* dir = malloc(256);
@@ -49,7 +41,14 @@ static db_signal db_close(){
 	return DB_CLOSE;
 }
 
-static char* db_sql_generator(char* base, ...){
+static void db_init_exec(const char* sql){
+	char* err;
+	if(sqlite3_exec(db, sql, NULL, NULL, &err) != DB_SUCCESS){
+		fprintf(stderr, "Failed to initialize database : %s\n", err);
+	}
+}
+
+char* db_sql_generator(char* base, ...){
 	va_list data;
 	va_start(data, base);
 	char* sql = malloc(SQL_BUFFER_SIZE);
@@ -58,15 +57,26 @@ static char* db_sql_generator(char* base, ...){
 	return sql;
 }
 
-static void db_init_exec(const char* sql){
-	char* err;
-	if(sqlite3_exec(db, sql, NULL, NULL, &err) != DB_SUCCESS){
-		fprintf(stderr, "Failed to initialize database : %s\n", err);
+void db_err(){
+	const char* err = sqlite3_errmsg(db);
+	int code = sqlite3_errcode(db);
+	if(err != NULL && code != 0){
+		fprintf(stderr, "Database error(%d) : %s\n", code, err);
 	}
 }
 
-static void db_close_err(){
+
+void db_close_err(){
 	fprintf(stderr, "Error : Database is closed!!!\n");
+}
+
+
+sqlite3* get_db(){
+	return db;
+}
+
+db_signal get_db_state(){
+	return db_state;
 }
 
 void db_init(){
@@ -103,28 +113,5 @@ unsigned int db_table_count(const char* table){
 	}else{
 		db_close_err();
 		return DB_FAILED;
-	}
-}
-
-db_signal db_music_dir_add(const char* path){
-	if(db_state == DB_OPEN){
-		char* sql = db_sql_generator("INSERT INTO %s(%s) VALUES(?);", MUSIC_DIR, MUSIC_DIR_DIR);
-		sqlite3_stmt* stmt = NULL;
-		sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
-		sqlite3_bind_text(stmt, 1, (char*)path, -1, SQLITE_TRANSIENT);
-		int status = sqlite3_step(stmt);
-		db_err();
-		sqlite3_finalize(stmt);
-		free(sql);
-		if(status == DB_SUCCESS || status == 101){
-			return DB_SUCCESS;
-		}else if(status == 19){
-			return DB_EXISTS;
-		}else{
-			return DB_FAILED;
-		}
-	}else{
-		db_close_err();
-		return DB_FAILED;	
 	}
 }

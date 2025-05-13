@@ -1,6 +1,8 @@
 #ifndef _DB_H
 #define _DB_H
 
+#include <sqlite3.h>
+
 typedef enum{
 	DB_SUCCESS,
 	DB_FAILED,
@@ -12,7 +14,11 @@ typedef enum{
 
 void db_init();
 void db_exit();
+void db_err();
+char* db_sql_generator(char* base, ...);
 unsigned int db_table_count(const char* table);
-db_signal db_music_dir_add(const char* path);
+sqlite3* get_db();
+db_signal get_db_state();
+void db_close_err();
 
 #endif

@@ -1,6 +1,13 @@
 #include <libadwaita-1/adwaita.h>
+#include <stdio.h>
+#include <string.h>
 //local includes
 #include <utils.h>
+
+#define FILENAME_BUF_SIZE 512
+
+
+static bool check_ext(const char* filename, const char* extension);
 
 GtkBuilder* load_ui(const char* ui){
 	GtkBuilder* builder = gtk_builder_new();
@@ -32,4 +39,45 @@ void show_alert_dialog(const char* title, const char* body, int mode, GObject* p
 	adw_alert_dialog_set_default_response(ADW_ALERT_DIALOG(dialog), "close");
 	adw_alert_dialog_set_close_response(ADW_ALERT_DIALOG(dialog), "close");
 	adw_dialog_present(ADW_DIALOG(dialog), GTK_WIDGET(parent));
+}
+
+static bool check_ext(const char* filename, const char* extension){
+	const char* dot = strrchr(filename, '.');
+	if(dot != NULL && dot != filename){
+		dot++;
+		if(strcmp(dot, extension) == 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	return false;
+}
+
+void dir_files_add_db(const char* path, const char* extension, const int dir_id){
+	DIR* dir = opendir(path);
+	if(dir == NULL){
+		fprintf(stderr, "Failed to open directory : %s\n", path);
+		return;	
+	}
+
+	struct dirent* de;
+	while((de = readdir(dir)) != NULL){
+		if(de->d_type == DT_DIR){
+			if(strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0){
+				continue;
+			}
+			if((strlen(path) + strlen(de->d_name)) < FILENAME_BUF_SIZE){
+				char buf[FILENAME_BUF_SIZE];
+				sprintf("%s/%s", path, de->d_name);
+				dir_files_add_db(buf, extension, dir_id);
+			}else{
+				sprintf("Failed to add file(%s/%s) : File path is too long\n", path, de->d_name);
+			}
+		}else{
+			if(check_ext(de->d_name, extension)){
+				//TODO add files to database;
+			}
+		}
+	}
 }

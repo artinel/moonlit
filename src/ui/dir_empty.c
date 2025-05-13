@@ -1,6 +1,7 @@
 #include <libadwaita-1/adwaita.h>
 #include <utils.h>
 #include <db/db.h>
+#include <db/music_dir.h>
 #include <ui/main_window.h>
 
 static void show_dir_add_dialog();
