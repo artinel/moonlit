@@ -245,7 +245,7 @@
 
 
 					<child>
-						<object class="GtkButton">
+						<object class="GtkButton" id="volume">
 							<property name="halign">GTK_ALIGN_CENTER</property>
 							<property name="valign">GTK_ALIGN_CENTER</property>
 							<style>

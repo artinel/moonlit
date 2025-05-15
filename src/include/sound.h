@@ -14,5 +14,6 @@ int sound_is_playing();
 double sound_get_position();
 void sound_set_is_playing(bool status);
 void sound_set_position(double pos);
+void sound_set_volume(int volume);
 
 #endif

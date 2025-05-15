@@ -72,3 +72,7 @@ void sound_set_position(double pos){
 		Mix_SetMusicPosition(pos);
 	}
 }
+
+void sound_set_volume(int volume){
+	Mix_VolumeMusic(volume);
+}
