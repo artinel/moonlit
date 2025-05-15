@@ -24,11 +24,13 @@ static GObject* playpause_image;
 static GObject* previous;
 static GObject* next;
 static GObject* position;
+static GObject* repeat;
 
 static music_t music_list[MUSIC_LIST_SIZE];
 static GtkWidget* btn_list[MUSIC_LIST_SIZE];
 static int list_size = 0;
 static int cur_index = 0;
+static bool is_repeat = false;
 
 static pthread_t prog_thread;
 static double prog_position;
@@ -41,6 +43,7 @@ static gboolean progress_update();
 static void progress_start();
 static void progress_stop();
 static void progress_bar_callback();
+static void repeat_callback();
 
 void main_window_activate(AdwApplication* app){
 	GtkBuilder* builder = load_ui("/ui/main");
@@ -55,11 +58,13 @@ void main_window_activate(AdwApplication* app){
 	previous = get_object(builder, "previous");
 	next = get_object(builder, "next");
 	position = get_object(builder, "position");
+	repeat = get_object(builder, "repeat");
 
 	g_signal_connect(GTK_BUTTON(playpause), "clicked", G_CALLBACK(playpause_callback), NULL);
 	g_signal_connect(GTK_BUTTON(previous), "clicked", G_CALLBACK(previous_callback), NULL);
 	g_signal_connect(GTK_BUTTON(next), "clicked", G_CALLBACK(next_callback), NULL);
 	g_signal_connect(GTK_SCALE(progress_bar), "change-value", G_CALLBACK(progress_bar_callback), NULL);
+	g_signal_connect(GTK_BUTTON(repeat), "clicked", G_CALLBACK(repeat_callback), NULL);
 
 	gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
 	load_css(GTK_WIDGET(window), "/css/global-style");
@@ -191,5 +196,19 @@ static void progress_bar_callback(gdouble value){
 }
 
 void music_finish_callback(){
-	next_callback();	
+	if(is_repeat == false){
+		next_callback();
+	}else{
+		playsong(NULL, GINT_TO_POINTER(cur_index));
+	}	
+}
+
+static void repeat_callback(){
+	if(is_repeat == false){
+		gtk_widget_add_css_class(GTK_WIDGET(repeat), "suggested-action");
+	}else{
+		gtk_widget_remove_css_class(GTK_WIDGET(repeat), "suggested-action");
+	}
+	
+	is_repeat = !is_repeat;
 }
