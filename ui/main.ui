@@ -120,13 +120,6 @@
 					
 
 					<child>
-						<object class="GtkImage">
-							<property name="resource">/image/empty-music</property>
-							<property name="pixel-size">80</property>
-						</object>
-					</child>
-
-					<child>
 						<object class="GtkBox">
 							<property name="orientation">vertical</property>
 							<property name="spacing">5</property>
@@ -136,6 +129,11 @@
 								<object class="GtkLabel" id="title">
 									<property name="label">Unknown Title</property>
 									<property name="halign">GTK_ALIGN_START</property>
+									<property name="xalign">0</property>
+									<property name="max-width-chars">45</property>
+									<property name="width-chars">45</property>
+									<property name="lines">1</property>
+									<property name="wrap">TRUE</property>
 									<style>
 										<class name="title-2"/>
 									</style>
@@ -288,7 +286,7 @@
 					</child>
 					
 					<child>
-						<object class="GtkButton">
+						<object class="GtkButton" id="like">
 							<property name="halign">GTK_ALIGN_CENTER</property>
 							<property name="valign">GTK_ALIGN_CENTER</property>
 							<property name="margin-end">10</property>

@@ -5,6 +5,7 @@
 #include <utils.h>
 #include <db/music.h>
 #include <db/music_dir.h>
+#include <db/like.h>
 #include <ui/home.h>
 #include <sound.h>
 #include <ui/main_window.h>
@@ -195,4 +196,9 @@ void playsong(GtkWidget* self, gpointer p){
 	set_playing_title(sound_get_title(), (const char*)music.path);
 	set_playing_artist(sound_get_artist());
 	set_playing_duration(sound_get_duration());
+	if(db_like_exists(music.id) == DB_EXISTS){
+		set_playing_like(true);
+	}else{
+		set_playing_like(false);
+	}
 }

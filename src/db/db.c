@@ -5,6 +5,7 @@
 #include <db/db.h>
 #include <db/music_dir.h>
 #include <db/music.h>
+#include <db/like.h>
 
 #define DB_NAME "/.local/share/moonlit/data.db"
 #define SQL_BUFFER_SIZE 1024
@@ -93,10 +94,18 @@ void db_init(){
 				%s INTEGER NOT NULL, %s TEXT NOT NULL);",
 				MUSIC, MUSIC_ID, MUSIC_ID_DIR, MUSIC_PATH);
 
+		char* sql_like = db_sql_generator(
+				"CREATE TABLE IF NOT EXISTS %s(%s INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \
+				%s INTEGER NOT NULL UNIQUE);",
+				LIKE, LIKE_ID, LIKE_MUSIC_ID);
+
 		db_init_exec(sql_music_dir);	
 		db_init_exec(sql_music);
-
+		db_init_exec(sql_like);
+		
 		free(sql_music_dir);
+		free(sql_music);
+		free(sql_like);
 	}
 }
 

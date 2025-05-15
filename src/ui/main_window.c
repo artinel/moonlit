@@ -7,6 +7,7 @@
 #include <db/db.h>
 #include <db/music_dir.h>
 #include <db/music.h>
+#include <db/like.h>
 #include <ui/dir_empty.h>
 #include <ui/home.h>
 #include <sound.h>
@@ -25,6 +26,7 @@ static GObject* previous;
 static GObject* next;
 static GObject* position;
 static GObject* repeat;
+static GObject* like;
 
 static music_t music_list[MUSIC_LIST_SIZE];
 static GtkWidget* btn_list[MUSIC_LIST_SIZE];
@@ -44,6 +46,7 @@ static void progress_start();
 static void progress_stop();
 static void progress_bar_callback();
 static void repeat_callback();
+static void like_callback();
 
 void main_window_activate(AdwApplication* app){
 	GtkBuilder* builder = load_ui("/ui/main");
@@ -59,12 +62,14 @@ void main_window_activate(AdwApplication* app){
 	next = get_object(builder, "next");
 	position = get_object(builder, "position");
 	repeat = get_object(builder, "repeat");
+	like = get_object(builder, "like");
 
 	g_signal_connect(GTK_BUTTON(playpause), "clicked", G_CALLBACK(playpause_callback), NULL);
 	g_signal_connect(GTK_BUTTON(previous), "clicked", G_CALLBACK(previous_callback), NULL);
 	g_signal_connect(GTK_BUTTON(next), "clicked", G_CALLBACK(next_callback), NULL);
 	g_signal_connect(GTK_SCALE(progress_bar), "change-value", G_CALLBACK(progress_bar_callback), NULL);
 	g_signal_connect(GTK_BUTTON(repeat), "clicked", G_CALLBACK(repeat_callback), NULL);
+	g_signal_connect(GTK_BUTTON(like), "clicked", G_CALLBACK(like_callback), NULL);
 
 	gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
 	load_css(GTK_WIDGET(window), "/css/global-style");
@@ -107,6 +112,14 @@ void set_playing_duration(const double duration){
 	parse_time(buf, duration);
 	gtk_label_set_label(GTK_LABEL(lbl_duration), buf);
 	gtk_range_set_range(GTK_RANGE(progress_bar), 0, duration);
+}
+
+void set_playing_like(bool is_like){
+	if(is_like == true){
+		gtk_widget_add_css_class(GTK_WIDGET(like), "destructive-action");
+	}else{
+		gtk_widget_remove_css_class(GTK_WIDGET(like), "destructive-action");
+	}
 }
 
 void add_to_music_list(music_t music, GtkWidget* btn){
@@ -211,4 +224,14 @@ static void repeat_callback(){
 	}
 	
 	is_repeat = !is_repeat;
+}
+
+static void like_callback(){
+	if(db_like_exists(music_list[cur_index].id) == DB_EXISTS){
+		gtk_widget_remove_css_class(GTK_WIDGET(like), "destructive-action");
+		db_like_remove(music_list[cur_index].id);
+	}else{
+		gtk_widget_add_css_class(GTK_WIDGET(like), "destructive-action");
+		db_like_add(music_list[cur_index].id);
+	}
 }
