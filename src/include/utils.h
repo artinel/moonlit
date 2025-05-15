@@ -2,6 +2,7 @@
 #define _UTILS_H
 
 #include <libadwaita-1/adwaita.h>
+#include <db/music.h>
 
 GtkBuilder* load_ui(const char* ui);
 GObject* get_object(GtkBuilder* builder, const char* id);
@@ -11,5 +12,6 @@ void dir_files_add_db(const char* path, const char* extension, const int dir_id)
 void show_dir_add_dialog();
 void parse_time(char* buffer, const double dur);
 void playsong(GtkWidget* self, gpointer p);
+void fill_listbox(GtkListBox* list_box, music_t* list, int count);
 
 #endif

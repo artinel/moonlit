@@ -29,6 +29,8 @@ static GObject* repeat;
 static GObject* like;
 static GObject* volume;
 static GObject* volume_dialog;
+static GObject* tab_home;
+static GObject* tab_like;
 
 static music_t music_list[MUSIC_LIST_SIZE];
 static GtkWidget* btn_list[MUSIC_LIST_SIZE];
@@ -36,6 +38,7 @@ static int list_size = 0;
 static int cur_index = 0;
 static bool is_repeat = false;
 static int volume_level = 70;
+static GObject* cur_tab_active;
 
 static pthread_t prog_thread;
 static double prog_position;
@@ -52,6 +55,8 @@ static void repeat_callback();
 static void like_callback();
 static void volume_callback();
 static void volume_bar_callback(GtkScale* self, gdouble value);
+static void tab_like_callback();
+static void tab_home_callback();
 
 void main_window_activate(AdwApplication* app){
 	GtkBuilder* builder = load_ui("/ui/main");
@@ -69,6 +74,8 @@ void main_window_activate(AdwApplication* app){
 	repeat = get_object(builder, "repeat");
 	like = get_object(builder, "like");
 	volume = get_object(builder, "volume");
+	tab_home = get_object(builder, "tab_home");
+	tab_like = get_object(builder, "tab_like");
 
 	g_signal_connect(GTK_BUTTON(playpause), "clicked", G_CALLBACK(playpause_callback), NULL);
 	g_signal_connect(GTK_BUTTON(previous), "clicked", G_CALLBACK(previous_callback), NULL);
@@ -77,6 +84,8 @@ void main_window_activate(AdwApplication* app){
 	g_signal_connect(GTK_BUTTON(repeat), "clicked", G_CALLBACK(repeat_callback), NULL);
 	g_signal_connect(GTK_BUTTON(like), "clicked", G_CALLBACK(like_callback), NULL);
 	g_signal_connect(GTK_BUTTON(volume), "clicked", G_CALLBACK(volume_callback), NULL);
+	g_signal_connect(GTK_BUTTON(tab_like), "clicked", G_CALLBACK(tab_like_callback), NULL);
+	g_signal_connect(GTK_BUTTON(tab_home), "clicked", G_CALLBACK(tab_home_callback), NULL);
 
 	gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
 	load_css(GTK_WIDGET(window), "/css/global-style");
@@ -86,6 +95,8 @@ void main_window_activate(AdwApplication* app){
 	if(db_table_count(MUSIC_DIR) > 0){
 		home_init(window);
 		sound_set_volume(volume_level);
+		gtk_widget_add_css_class(GTK_WIDGET(tab_home), "suggested-action");
+		cur_tab_active = tab_home;
 	}else{
 		dir_empty_init(window);
 	}
@@ -136,6 +147,11 @@ void add_to_music_list(music_t music, GtkWidget* btn){
 		btn_list[list_size] = btn;
 		list_size++;
 	}
+}
+
+void clear_music_list(){
+	list_size = 0;
+	cur_index = 0;
 }
 
 music_t get_music_list(int index){
@@ -262,4 +278,37 @@ static void volume_bar_callback(GtkScale* self, gdouble value){
 	gtk_range_set_value(GTK_RANGE(self), volume_level);
 	gtk_range_set_fill_level(GTK_RANGE(self), volume_level);
 	sound_set_volume(volume_level);
+}
+
+static void tab_like_callback(GtkWidget* self){
+	if(GTK_WIDGET(cur_tab_active) != self){
+		clear_music_list();
+		clear_home_list();
+		gtk_widget_remove_css_class(GTK_WIDGET(cur_tab_active), "suggested-action");
+		gtk_widget_add_css_class(GTK_WIDGET(self), "suggested-action");
+		cur_tab_active = (GObject*)self;
+
+		music_t list[MUSIC_LIST_SIZE];
+		int count = db_like_get_all(list, MUSIC_LIST_SIZE);
+		clear_home_list();
+		clear_music_list();
+		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+
+	}
+}
+
+static void tab_home_callback(GtkWidget* self){
+	if(GTK_WIDGET(cur_tab_active) != self){
+		clear_music_list();
+		clear_home_list();
+		gtk_widget_remove_css_class(GTK_WIDGET(cur_tab_active), "suggested-action");
+		gtk_widget_add_css_class(GTK_WIDGET(self), "suggested-action");
+		cur_tab_active = (GObject*)self;
+		
+		music_t list[MUSIC_LIST_SIZE];
+		int count = db_music_get_all(list, MUSIC_LIST_SIZE);
+		clear_home_list();
+		clear_music_list();
+		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+	}
 }
