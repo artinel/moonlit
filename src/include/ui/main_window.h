@@ -12,5 +12,6 @@ void set_playing_duration(const double duration);
 void add_to_music_list(music_t music, GtkWidget* btn);
 music_t get_music_list(int index);
 void set_current_index(int index);
+void music_finish_callback();
 
 #endif

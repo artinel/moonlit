@@ -10,9 +10,10 @@ static GObject* parent;
 static GtkWidget* cur_playing;
 
 static void playsong(GtkWidget* self, gpointer p){
+
 	int index = GPOINTER_TO_INT(p);
 	music_t music = get_music_list(index);
-	sound_set((const char*)music.path);
+	sound_set((const char*)music.path, music_finish_callback);
 	sound_play();
 	if(cur_playing != NULL){
 		gtk_widget_remove_css_class(GTK_WIDGET(cur_playing), "suggested-action");
@@ -36,7 +37,7 @@ void home_init(GObject* window){
 	int count = db_music_get_all(list, 512);
 
 	for(int i = 0; i < count; i++){
-		sound_set((const char*)list[i].path);
+		sound_set((const char*)list[i].path, NULL);
 
 		const char* title = sound_get_title();
 		const char* artist = sound_get_artist();

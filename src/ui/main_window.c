@@ -23,16 +23,24 @@ static GObject* playpause;
 static GObject* playpause_image;
 static GObject* previous;
 static GObject* next;
+static GObject* position;
 
 static music_t music_list[MUSIC_LIST_SIZE];
 static GtkWidget* btn_list[MUSIC_LIST_SIZE];
 static int list_size = 0;
 static int cur_index = 0;
 
+static pthread_t prog_thread;
+static double prog_position;
 
 static void playpause_callback();
 static void previous_callback();
 static void next_callback();
+static void* progress_thread(void* arg);
+static gboolean progress_update();
+static void progress_start();
+static void progress_stop();
+static void progress_bar_callback();
 
 void main_window_activate(AdwApplication* app){
 	GtkBuilder* builder = load_ui("/ui/main");
@@ -46,10 +54,12 @@ void main_window_activate(AdwApplication* app){
 	playpause_image = get_object(builder, "playpause_image");
 	previous = get_object(builder, "previous");
 	next = get_object(builder, "next");
+	position = get_object(builder, "position");
 
 	g_signal_connect(GTK_BUTTON(playpause), "clicked", G_CALLBACK(playpause_callback), NULL);
 	g_signal_connect(GTK_BUTTON(previous), "clicked", G_CALLBACK(previous_callback), NULL);
 	g_signal_connect(GTK_BUTTON(next), "clicked", G_CALLBACK(next_callback), NULL);
+	g_signal_connect(GTK_SCALE(progress_bar), "change-value", G_CALLBACK(progress_bar_callback), NULL);
 
 	gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
 	load_css(GTK_WIDGET(window), "/css/global-style");
@@ -68,12 +78,16 @@ void set_main_view(GObject* widget){
 }
 
 void set_playing_title(const char* title, const char* path){
+	progress_stop();
 	gtk_image_set_from_resource(GTK_IMAGE(playpause_image), "/icon/pause");
 	if(strlen(title) > 0){
 		gtk_label_set_label(GTK_LABEL(lbl_title), title);
 	}else{
 		gtk_label_set_label(GTK_LABEL(lbl_title), path);
 	}
+
+	progress_start();
+	g_idle_add(progress_update, NULL);
 }
 
 void set_playing_artist(const char* artist){
@@ -109,11 +123,13 @@ void set_current_index(int index){
 
 static void playpause_callback(){
 	if(sound_is_playing() == true){
-		sound_pause();
 		gtk_image_set_from_resource(GTK_IMAGE(playpause_image), "/icon/play");
+		sound_pause();
+		progress_stop();
 	}else{
 		gtk_image_set_from_resource(GTK_IMAGE(playpause_image), "/icon/pause");
 		sound_resume();
+		progress_start();
 	}
 }
 
@@ -122,7 +138,7 @@ static void previous_callback(){
 		gtk_widget_remove_css_class(btn_list[cur_index], "suggested-action");
 		cur_index--;
 		gtk_widget_add_css_class(btn_list[cur_index], "suggested-action");
-		sound_set((const char*)music_list[cur_index].path);
+		sound_set((const char*)music_list[cur_index].path, music_finish_callback);
 		sound_play();
 		set_playing_duration(sound_get_duration());
 	}
@@ -133,8 +149,49 @@ static void next_callback(){
 		gtk_widget_remove_css_class(btn_list[cur_index], "suggested-action");
 		cur_index++;
 		gtk_widget_add_css_class(btn_list[cur_index], "suggested-action");
-		sound_set((const char*)music_list[cur_index].path);
+		sound_set((const char*)music_list[cur_index].path, music_finish_callback);
 		sound_play();
 		set_playing_duration(sound_get_duration());
 	}
+}
+
+
+static void* progress_thread(void* arg){
+	while(sound_is_playing() == true){
+		prog_position = sound_get_position();
+		progress_update();
+		sleep(1);
+	}
+	return NULL;
+}
+
+static void progress_start(){
+	sound_set_is_playing(true);
+	pthread_create(&prog_thread, NULL, progress_thread, NULL);
+}
+
+static void progress_stop(){
+	if(prog_thread != 0){
+		sound_set_is_playing(false);
+		pthread_join(prog_thread, NULL);
+	}
+}
+
+static gboolean progress_update(){
+	char buf[6];
+	parse_time(buf, prog_position);
+	gtk_label_set_label(GTK_LABEL(position), buf);
+	gtk_range_set_value(GTK_RANGE(progress_bar), prog_position);
+	gtk_range_set_fill_level(GTK_RANGE(progress_bar), prog_position);
+	return G_SOURCE_REMOVE;
+}
+
+static void progress_bar_callback(gdouble value){
+	gtk_range_set_value(GTK_RANGE(progress_bar), value);
+	gtk_range_set_fill_level(GTK_RANGE(progress_bar), value);
+	sound_set_position(value);
+}
+
+void music_finish_callback(){
+	next_callback();	
 }

@@ -6,7 +6,7 @@
 #include <sound.h>
 
 static Mix_Music* music;
-static bool is_playing = false;
+static volatile bool is_playing = false;
 
 void sound_init(){
 	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
@@ -16,11 +16,12 @@ void sound_exit(){
 	Mix_CloseAudio();
 }
 
-void sound_set(const char* music_path){
+void sound_set(const char* music_path, void (*callback)(void)){
 	if(music != NULL){
 		Mix_FreeMusic(music);
 	}
 	music = Mix_LoadMUS(music_path);
+	Mix_HookMusicFinished(callback);
 }
 
 const char* sound_get_title(){
@@ -55,4 +56,19 @@ void sound_resume(){
 
 int sound_is_playing(){
 	return is_playing;
+}
+
+double sound_get_position(){
+	double pos = Mix_GetMusicPosition(music);
+	return pos;
+}
+
+void sound_set_is_playing(bool status){
+	is_playing = status;
+}
+
+void sound_set_position(double pos){
+	if(is_playing == true){
+		Mix_SetMusicPosition(pos);
+	}
 }

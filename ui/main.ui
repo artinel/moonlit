@@ -217,7 +217,7 @@
 					</child>
 
 					<child>
-						<object class="GtkLabel">
+						<object class="GtkLabel" id="position">
 							<property name="label">00:00</property>
 							<property name="margin-start">30</property>
 							<style>
