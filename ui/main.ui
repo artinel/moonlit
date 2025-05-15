@@ -3,8 +3,10 @@
 <requires lib="libadwaita" version="1.6"/>
 
 <object class="AdwWindow" id="window">
-	<property name="default-width">1280</property>
-	<property name="default-height">720</property>
+	<property name="default-width">1680</property>
+	<property name="default-height">1050</property>
+	<property name="width-request">1680</property>
+	<property name="height-request">1050</property>
 	<property name="content">
 		<object class="AdwToolbarView" id="main_view">
 			<child type="top">
@@ -122,7 +124,7 @@
 					<child>
 						<object class="GtkBox">
 							<property name="orientation">vertical</property>
-							<property name="spacing">5</property>
+							<property name="spacing">25</property>
 							<property name="valign">GTK_ALIGN_CENTER</property>
 
 							<child>
@@ -130,8 +132,8 @@
 									<property name="label">Unknown Title</property>
 									<property name="halign">GTK_ALIGN_START</property>
 									<property name="xalign">0</property>
-									<property name="max-width-chars">45</property>
-									<property name="width-chars">45</property>
+									<property name="max-width-chars">40</property>
+									<property name="width-chars">40</property>
 									<property name="lines">1</property>
 									<property name="wrap">TRUE</property>
 									<style>
