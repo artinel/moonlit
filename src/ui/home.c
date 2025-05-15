@@ -7,24 +7,7 @@
 #include <sound.h>
 
 static GObject* parent;
-static GtkWidget* cur_playing;
 
-static void playsong(GtkWidget* self, gpointer p){
-
-	int index = GPOINTER_TO_INT(p);
-	music_t music = get_music_list(index);
-	sound_set((const char*)music.path, music_finish_callback);
-	sound_play();
-	if(cur_playing != NULL){
-		gtk_widget_remove_css_class(GTK_WIDGET(cur_playing), "suggested-action");
-	}
-	gtk_widget_add_css_class(GTK_WIDGET(self), "suggested-action");
-	cur_playing = self;
-	set_playing_title(sound_get_title(), (const char*)music.path);
-	set_playing_artist(sound_get_artist());
-	set_playing_duration(sound_get_duration());
-	set_current_index(index);
-}
 
 void home_init(GObject* window){
 	parent = window;

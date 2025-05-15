@@ -10,5 +10,6 @@ void show_alert_dialog(const char* title, const char* body, int mode, GObject* p
 void dir_files_add_db(const char* path, const char* extension, const int dir_id);
 void show_dir_add_dialog();
 void parse_time(char* buffer, const double dur);
+void playsong(GtkWidget* self, gpointer p);
 
 #endif

@@ -87,7 +87,6 @@ void set_playing_title(const char* title, const char* path){
 	}
 
 	progress_start();
-	g_idle_add(progress_update, NULL);
 }
 
 void set_playing_artist(const char* artist){
@@ -117,8 +116,16 @@ music_t get_music_list(int index){
 	return music_list[index];	
 }
 
+GtkWidget* get_btn_list(int index){
+	return btn_list[index];
+}
+
 void set_current_index(int index){
 	cur_index = index;
+}
+
+int get_current_index(){
+	return cur_index;
 }
 
 static void playpause_callback(){
@@ -135,28 +142,18 @@ static void playpause_callback(){
 
 static void previous_callback(){
 	if(cur_index > 0){
-		gtk_widget_remove_css_class(btn_list[cur_index], "suggested-action");
-		cur_index--;
-		gtk_widget_add_css_class(btn_list[cur_index], "suggested-action");
-		sound_set((const char*)music_list[cur_index].path, music_finish_callback);
-		sound_play();
-		set_playing_duration(sound_get_duration());
+		playsong(NULL, GINT_TO_POINTER(cur_index - 1));
 	}
 }
 
 static void next_callback(){
 	if(cur_index < MUSIC_LIST_SIZE - 1){
-		gtk_widget_remove_css_class(btn_list[cur_index], "suggested-action");
-		cur_index++;
-		gtk_widget_add_css_class(btn_list[cur_index], "suggested-action");
-		sound_set((const char*)music_list[cur_index].path, music_finish_callback);
-		sound_play();
-		set_playing_duration(sound_get_duration());
+		playsong(NULL, GINT_TO_POINTER(cur_index + 1));
 	}
 }
 
 
-static void* progress_thread(void* arg){
+static void* progress_thread(){
 	while(sound_is_playing() == true){
 		prog_position = sound_get_position();
 		progress_update();
@@ -168,6 +165,7 @@ static void* progress_thread(void* arg){
 static void progress_start(){
 	sound_set_is_playing(true);
 	pthread_create(&prog_thread, NULL, progress_thread, NULL);
+	g_idle_add(progress_update, NULL);
 }
 
 static void progress_stop(){

@@ -6,15 +6,17 @@
 #include <db/music.h>
 #include <db/music_dir.h>
 #include <ui/home.h>
+#include <sound.h>
+#include <ui/main_window.h>
 
 #define FILENAME_BUF_SIZE 512
 
 
 static bool check_ext(const char* filename, const char* extension);
-static void thread_dir_add(gpointer data);
+static void* thread_dir_add(void* data);
 static void show_dir_add_callback(GObject* src, GAsyncResult* res, gpointer data);
 
-static struct dir_thread{
+struct dir_thread{
 	char* path;
 	char* ext;
 	int dir_id;
@@ -83,8 +85,8 @@ void dir_files_add_db(const char* path, const char* extension, const int dir_id)
 				continue;
 			}
 			if((strlen(path) + strlen(de->d_name)) < FILENAME_BUF_SIZE){
-				char buf[FILENAME_BUF_SIZE];
-				sprintf(buf, "%s/%s", path, de->d_name);
+				char buf[FILENAME_BUF_SIZE + 1];
+				snprintf(buf, sizeof(buf),"%s/%s", path, de->d_name);
 				dir_files_add_db(buf, extension, dir_id);
 			}else{
 				fprintf(stderr, "Failed to add file(%s/%s) : File path is too long\n", path, de->d_name);
@@ -108,11 +110,12 @@ static GObject* show_music_add_load_dialog(GObject* parent){
 	return dialog;
 }
 
-static void thread_dir_add(gpointer data){
+static void* thread_dir_add(void* data){
 	struct dir_thread* dir = (struct dir_thread*) data;
 	dir_files_add_db(dir->path, dir->ext, dir->dir_id);
 	adw_dialog_force_close(ADW_DIALOG(dir->dialog));
 	home_init(dir->parent);
+	return NULL;
 }
 
 
@@ -132,7 +135,8 @@ static void show_dir_add_callback(GObject* src, GAsyncResult* res, gpointer data
 			dir_s->dialog = dialog;
 			dir_s->parent = parent;
 
-			GThread* thread = g_thread_new("add-thread", (GThreadFunc)thread_dir_add, dir_s);
+			pthread_t thread;
+			pthread_create(&thread, NULL, thread_dir_add, (void*)dir_s);
 		}else if(res == DB_EXISTS){
 			show_alert_dialog("Fail", "Directory already exists", 0, parent);
 		}else{
@@ -176,4 +180,19 @@ void parse_time(char* buffer, const double dur){
 		buffer[4] = buf[1];
 	}
 
+}
+
+void playsong(GtkWidget* self, gpointer p){
+	int index = GPOINTER_TO_INT(p);
+	music_t music = get_music_list(index);
+	sound_set((const char*)music.path, music_finish_callback);
+	sound_play();
+	if(get_btn_list(get_current_index()) != NULL){
+		gtk_widget_remove_css_class(GTK_WIDGET(get_btn_list(get_current_index())), "suggested-action");
+	}
+	set_current_index(index);
+	gtk_widget_add_css_class(GTK_WIDGET(get_btn_list(index)), "suggested-action");
+	set_playing_title(sound_get_title(), (const char*)music.path);
+	set_playing_artist(sound_get_artist());
+	set_playing_duration(sound_get_duration());
 }
