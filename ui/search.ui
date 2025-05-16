@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="AdwDialog" id="search_dialog">
+	<property name="follows-content-size">TRUE</property>
+	<property name="presentation-mode">ADW_DIALOG_FLOATING</property>
+	<child>
+		<object class="AdwEntryRow" id="search_entry">
+			<property name="show-apply-button">TRUE</property>
+			<property name="title">Search</property>
+			<property name="max-length">30</property>
+		</object>
+	</child>
+</object>
+
+</interface>

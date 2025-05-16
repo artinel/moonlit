@@ -10,6 +10,7 @@
 		<file preprocess="xml-stripblanks" alias="music_item">ui/music_item.ui</file>
 		<file preprocess="xml-stripblanks" alias="volume">ui/volume.ui</file>
 		<file preprocess="xml-stripblanks" alias="dir_dialog">ui/dir_dialog.ui</file>
+		<file preprocess="xml-stripblanks" alias="search_dialog">ui/search.ui</file>
 	</gresource>
 
 	<gresource prefix="/css">

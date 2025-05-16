@@ -85,7 +85,7 @@
 
 
 							<child>
-								<object class="GtkButton">
+								<object class="GtkButton" id="tab_search">
 									<property name="halign">GTK_ALIGN_CENTER</property>
 									<property name="valign">GTK_ALIGN_CENTER</property>
 									<property name="margin-end">10</property>
