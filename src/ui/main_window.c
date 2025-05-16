@@ -388,7 +388,6 @@ static void dir_dialog_add(){
 static void dir_delete_callback(GtkWidget* self, gpointer data){
 	int id = GPOINTER_TO_INT(data);
 	
-	g_print("ID : %d\n", id);
 
 	db_music_dir_delete(id);
 	db_music_delete(id);
@@ -422,7 +421,6 @@ static void tab_search_apply_callback(GtkWidget* self){
 	music_t list[MUSIC_LIST_SIZE];
 	char buf[33];
 	snprintf(buf, sizeof(buf), "%c%s%c", '%', search, '%');
-	g_print("TEST IS : %s\n", buf);
 	int count = db_music_search(list, MUSIC_LIST_SIZE, buf);
 	if(count > 0){
 		clear_home_list();

@@ -3,13 +3,20 @@
 <requires lib="libadwaita" version="1.6"/>
 
 <object class="AdwDialog" id="search_dialog">
-	<property name="follows-content-size">TRUE</property>
+	<property name="follows-content-size">FALSE</property>
+	<property name="width-request">500</property>
+	<property name="height-request">100</property>
 	<property name="presentation-mode">ADW_DIALOG_FLOATING</property>
 	<child>
 		<object class="AdwEntryRow" id="search_entry">
 			<property name="show-apply-button">TRUE</property>
 			<property name="title">Search</property>
 			<property name="max-length">30</property>
+			<property name="hexpand">TRUE</property>
+			<property name="vexpand">TRUE</property>
+			<style>
+				<class name="title-2"/>
+			</style>
 		</object>
 	</child>
 </object>
