@@ -17,5 +17,6 @@ GtkWidget* get_btn_list(int index);
 int get_current_index();
 void set_playing_like(bool is_like);
 void clear_music_list();
+void progress_kill();
 
 #endif

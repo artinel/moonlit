@@ -6,6 +6,7 @@
 #include <ui/splash_window.h>
 #include <db/db.h>
 #include <sound.h>
+#include <ui/main_window.h>
 
 #define APP_ID "com.artinel.moonlit"
 
@@ -31,9 +32,10 @@ void constructor(){
 
 __attribute__((destructor))
 void destructor(){
-	db_exit();
+	progress_kill();
 	sound_exit();
 	SDL_Quit();
+	db_exit();
 }
 
 int main(int argc, char** argv){

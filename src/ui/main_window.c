@@ -312,3 +312,7 @@ static void tab_home_callback(GtkWidget* self){
 		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
 	}
 }
+
+void progress_kill(){
+	pthread_kill(prog_thread, 9);
+}
