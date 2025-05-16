@@ -13,6 +13,7 @@ void sound_init(){
 }
 
 void sound_exit(){
+	Mix_FreeMusic(music);
 	Mix_CloseAudio();
 }
 

@@ -16,5 +16,6 @@ typedef struct music{
 
 db_signal db_music_add(const char* path, const int dir_id);
 int db_music_get_all(music_t* list, const int size);
+db_signal db_music_delete(const int id);
 
 #endif

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="AdwDialog" id="dir_dialog">
+	<property name="width-request">500</property>
+	<property name="height-request">500</property>
+	<child>
+		<object class="AdwToolbarView">
+			<child type="top">
+				<object class="AdwHeaderBar">
+					<property name="show-end-title-buttons">FALSE</property>
+					<property name="show-start-title-buttons">FALSE</property>
+					<child type="start">
+						<object class="GtkButton" id="dir_dialog_close">
+							<property name="label">Close</property>
+						</object>
+					</child>
+
+					<child type="end">
+						<object class="GtkButton" id="dir_dialog_add">
+							<property name="label">Add Directory</property>
+							<style>
+								<class name="suggested-action"/>
+							</style>
+						</object>
+					</child>
+
+				</object>
+			</child>
+
+
+			<property name="content">
+				<object class="GtkScrolledWindow">
+					<property name="propagate-natural-height">TRUE</property>
+					<child>
+						<object class="GtkListBox" id="dir_dialog_list">
+							<property name="selection-mode">GTK_SELECTION_NONE</property>
+						</object>
+					</child>
+				</object>
+			</property>
+
+		</object>
+	</child>
+</object>
+
+</interface>

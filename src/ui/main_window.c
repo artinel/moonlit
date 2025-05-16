@@ -31,6 +31,8 @@ static GObject* volume;
 static GObject* volume_dialog;
 static GObject* tab_home;
 static GObject* tab_like;
+static GObject* tab_dir;
+static GObject* dir_dialog;
 
 static music_t music_list[MUSIC_LIST_SIZE];
 static GtkWidget* btn_list[MUSIC_LIST_SIZE];
@@ -57,6 +59,10 @@ static void volume_callback();
 static void volume_bar_callback(GtkScale* self, gdouble value);
 static void tab_like_callback();
 static void tab_home_callback();
+static void tab_dir_callback();
+static void dir_dialog_close();
+static void dir_dialog_add();
+static void dir_delete_callback(GtkWidget* self, gpointer data);
 
 void main_window_activate(AdwApplication* app){
 	GtkBuilder* builder = load_ui("/ui/main");
@@ -76,6 +82,7 @@ void main_window_activate(AdwApplication* app){
 	volume = get_object(builder, "volume");
 	tab_home = get_object(builder, "tab_home");
 	tab_like = get_object(builder, "tab_like");
+	tab_dir = get_object(builder, "tab_dir");
 
 	g_signal_connect(GTK_BUTTON(playpause), "clicked", G_CALLBACK(playpause_callback), NULL);
 	g_signal_connect(GTK_BUTTON(previous), "clicked", G_CALLBACK(previous_callback), NULL);
@@ -86,6 +93,7 @@ void main_window_activate(AdwApplication* app){
 	g_signal_connect(GTK_BUTTON(volume), "clicked", G_CALLBACK(volume_callback), NULL);
 	g_signal_connect(GTK_BUTTON(tab_like), "clicked", G_CALLBACK(tab_like_callback), NULL);
 	g_signal_connect(GTK_BUTTON(tab_home), "clicked", G_CALLBACK(tab_home_callback), NULL);
+	g_signal_connect(GTK_BUTTON(tab_dir), "clicked", G_CALLBACK(tab_dir_callback), NULL);
 
 	gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
 	load_css(GTK_WIDGET(window), "/css/global-style");
@@ -313,6 +321,65 @@ static void tab_home_callback(GtkWidget* self){
 	}
 }
 
+static void tab_dir_callback(GtkWidget* self){
+	GtkBuilder* dir_builder = dir_builder = load_ui("/ui/dir_dialog");
+	dir_dialog = get_object(dir_builder, "dir_dialog");
+	GObject* close = get_object(dir_builder, "dir_dialog_close");
+	GObject* add = get_object(dir_builder, "dir_dialog_add");
+	GObject* list = get_object(dir_builder, "dir_dialog_list");
+
+	g_signal_connect(GTK_BUTTON(close), "clicked", G_CALLBACK(dir_dialog_close), NULL);
+	g_signal_connect(GTK_BUTTON(add), "clicked", G_CALLBACK(dir_dialog_add), NULL);
+	
+	music_dir_t data[MUSIC_LIST_SIZE];
+	int count = db_music_dir_get_all(data, MUSIC_LIST_SIZE);
+
+	for(int i = 0; i < count; i++){
+		GtkWidget* row = adw_action_row_new();
+		adw_preferences_row_set_title(ADW_PREFERENCES_ROW(row), (const char*)data[i].dir);
+
+		gtk_widget_set_margin_top(GTK_WIDGET(row), 40);
+
+		GtkWidget* delete = gtk_button_new_with_label("Delete");
+		gtk_widget_add_css_class(GTK_WIDGET(delete), "destructive-action");
+		adw_action_row_add_suffix(ADW_ACTION_ROW(row), GTK_WIDGET(delete));
+		
+		
+
+		g_signal_connect_data(GTK_BUTTON(delete), "clicked", G_CALLBACK(dir_delete_callback), GINT_TO_POINTER(data[i].id), NULL, 0);
+
+		gtk_list_box_append(GTK_LIST_BOX(list), GTK_WIDGET(row));
+	}
+
+	adw_dialog_present(ADW_DIALOG(dir_dialog), GTK_WIDGET(window));
+}
+
+static void dir_dialog_close(){
+	adw_dialog_close(ADW_DIALOG(dir_dialog));
+}
+
+static void dir_dialog_add(){
+	show_dir_add_dialog(GTK_WIDGET(window));
+	dir_dialog_close();
+}
+
 void progress_kill(){
 	pthread_kill(prog_thread, 9);
+}
+
+static void dir_delete_callback(GtkWidget* self, gpointer data){
+	int id = GPOINTER_TO_INT(data);
+	
+	g_print("ID : %d\n", id);
+
+	db_music_dir_delete(id);
+	db_music_delete(id);
+
+	music_t list[MUSIC_LIST_SIZE];
+	int count = db_music_get_all(list, MUSIC_LIST_SIZE);
+	clear_home_list();
+	clear_music_list();
+	fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+
+	dir_dialog_close();
 }
