@@ -32,7 +32,6 @@ void constructor(){
 
 __attribute__((destructor))
 void destructor(){
-	progress_kill();
 	sound_exit();
 	SDL_Quit();
 	db_exit();

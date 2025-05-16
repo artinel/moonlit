@@ -383,9 +383,7 @@ static void dir_dialog_add(){
 	dir_dialog_close();
 }
 
-void progress_kill(){
-	pthread_kill(prog_thread, 9);
-}
+
 
 static void dir_delete_callback(GtkWidget* self, gpointer data){
 	int id = GPOINTER_TO_INT(data);
