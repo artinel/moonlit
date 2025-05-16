@@ -11,6 +11,7 @@
 		<file preprocess="xml-stripblanks" alias="volume">ui/volume.ui</file>
 		<file preprocess="xml-stripblanks" alias="dir_dialog">ui/dir_dialog.ui</file>
 		<file preprocess="xml-stripblanks" alias="search_dialog">ui/search.ui</file>
+		<file preprocess="xml-stripblanks" alias="empty">ui/empty.ui</file>
 	</gresource>
 
 	<gresource prefix="/css">

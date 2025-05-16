@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+<requires lib="libadwaita" version="1.6"/>
+
+<object class="GtkBox" id="empty">
+	<property name="orientation">vertical</property>
+	<property name="valign">GTK_ALIGN_CENTER</property>
+	<property name="halign">GTK_ALIGN_CENTER</property>
+
+	<child>
+		<object class="GtkLabel">
+			<property name="label">No Music Found</property>
+			<style>
+				<class name="title-1"/>
+			</style>
+		</object>
+	</child>
+</object>
+
+</interface>

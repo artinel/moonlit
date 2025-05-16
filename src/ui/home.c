@@ -8,19 +8,23 @@
 
 static GObject* parent;
 static GObject* home_list;
+static GObject* home_view;
 
 void home_init(GObject* window){
 	parent = window;
 	GtkBuilder* home_builder = load_ui("/ui/home");
-	GObject* home_view = get_object(home_builder, "home_view");
+	home_view = get_object(home_builder, "home_view");
 	home_list = get_object(home_builder, "home_list");
-	set_main_view(home_view);
 
 	music_t list[1024];
 	int count = db_music_get_all(list, 1024);
-	clear_home_list();
-	fill_listbox(GTK_LIST_BOX(home_list), list, count);
-
+	if(count > 0){
+		clear_home_list();
+		fill_listbox(GTK_LIST_BOX(home_list), list, count);
+		set_main_view(home_view);
+	}else{
+		set_view_empty();
+	}
 }
 
 void clear_home_list(){
@@ -29,4 +33,8 @@ void clear_home_list(){
 
 GObject* get_home_list(){
 	return home_list;
+}
+
+GObject* get_home_view(){
+	return home_view;
 }

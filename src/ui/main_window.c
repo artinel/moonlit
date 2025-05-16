@@ -35,6 +35,7 @@ static GObject* tab_dir;
 static GObject* tab_search;
 static GObject* dir_dialog;
 static GObject* search_dialog;
+static GObject* empty;
 
 static music_t music_list[MUSIC_LIST_SIZE];
 static GtkWidget* btn_list[MUSIC_LIST_SIZE];
@@ -88,6 +89,9 @@ void main_window_activate(AdwApplication* app){
 	tab_like = get_object(builder, "tab_like");
 	tab_dir = get_object(builder, "tab_dir");
 	tab_search = get_object(builder, "tab_search");
+
+	GtkBuilder* empty_builder = load_ui("/ui/empty");
+	empty = get_object(empty_builder, "empty");
 
 	g_signal_connect(GTK_BUTTON(playpause), "clicked", G_CALLBACK(playpause_callback), NULL);
 	g_signal_connect(GTK_BUTTON(previous), "clicked", G_CALLBACK(previous_callback), NULL);
@@ -304,9 +308,14 @@ static void tab_like_callback(GtkWidget* self){
 
 		music_t list[MUSIC_LIST_SIZE];
 		int count = db_like_get_all(list, MUSIC_LIST_SIZE);
-		clear_home_list();
-		clear_music_list();
-		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+		if(count > 0){
+			clear_home_list();
+			clear_music_list();
+			fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+			set_main_view(get_home_view());
+		}else{
+			set_view_empty();
+		}
 
 	}
 }
@@ -321,9 +330,14 @@ static void tab_home_callback(GtkWidget* self){
 		
 		music_t list[MUSIC_LIST_SIZE];
 		int count = db_music_get_all(list, MUSIC_LIST_SIZE);
-		clear_home_list();
-		clear_music_list();
-		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+		if(count > 0){
+			clear_home_list();
+			clear_music_list();
+			fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+			set_main_view(get_home_view());
+		}else{
+			set_view_empty();
+		}
 	}
 }
 
@@ -383,10 +397,14 @@ static void dir_delete_callback(GtkWidget* self, gpointer data){
 
 	music_t list[MUSIC_LIST_SIZE];
 	int count = db_music_get_all(list, MUSIC_LIST_SIZE);
-	clear_home_list();
-	clear_music_list();
-	fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
-
+	if(count > 0){
+		clear_home_list();
+		clear_music_list();
+		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+		set_main_view(get_home_view());
+	}else{
+		set_view_empty();
+	}
 	dir_dialog_close();
 }
 
@@ -408,13 +426,21 @@ static void tab_search_apply_callback(GtkWidget* self){
 	snprintf(buf, sizeof(buf), "%c%s%c", '%', search, '%');
 	g_print("TEST IS : %s\n", buf);
 	int count = db_music_search(list, MUSIC_LIST_SIZE, buf);
-	clear_home_list();
-	clear_music_list();
-	fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
-
+	if(count > 0){
+		clear_home_list();
+		clear_music_list();
+		fill_listbox(GTK_LIST_BOX(get_home_list()), list, count);
+		set_main_view(get_home_view());
+	}else{
+		set_view_empty();
+	}
 	gtk_widget_remove_css_class(GTK_WIDGET(cur_tab_active), "suggested-action");
 	gtk_widget_add_css_class(GTK_WIDGET(tab_search), "suggested-action");
 	cur_tab_active = (GObject*)tab_search;
 		
 	adw_dialog_close(ADW_DIALOG(search_dialog));
+}
+
+void set_view_empty(){
+	set_main_view(empty);
 }
