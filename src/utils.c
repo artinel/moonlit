@@ -9,6 +9,7 @@
 #include <ui/home.h>
 #include <sound.h>
 #include <ui/main_window.h>
+#include <music_info.h>
 
 #define FILENAME_BUF_SIZE 512
 
@@ -187,15 +188,19 @@ void playsong(GtkWidget* self, gpointer p){
 	int index = GPOINTER_TO_INT(p);
 	music_t music = get_music_list(index);
 	sound_set((const char*)music.path, music_finish_callback);
+	music_info_set((const char*) music.path);
 	sound_play();
-	if(get_btn_list(get_current_index()) != NULL){
-		gtk_widget_remove_css_class(GTK_WIDGET(get_btn_list(get_current_index())), "suggested-action");
+	
+	for(int i = 0; i < get_list_size(); i++){
+		gtk_widget_remove_css_class(GTK_WIDGET(get_btn_list(i)), "suggested-action");
 	}
+
 	set_current_index(index);
+	set_playing_index(index);
 	gtk_widget_add_css_class(GTK_WIDGET(get_btn_list(index)), "suggested-action");
-	set_playing_title(sound_get_title(), (const char*)music.path);
-	set_playing_artist(sound_get_artist());
-	set_playing_duration(sound_get_duration());
+	set_playing_title(music_info_get_title(), (const char*)music.path);
+	set_playing_artist(music_info_get_artist());
+	set_playing_duration(music_info_get_duration());
 	if(db_like_exists(music.id) == DB_EXISTS){
 		set_playing_like(true);
 	}else{
@@ -208,11 +213,11 @@ void playsong(GtkWidget* self, gpointer p){
 void fill_listbox(GtkListBox* list_box, music_t* list, int count){
 
 	for(int i = 0; i < count; i++){
-		sound_set((const char*)list[i].path, NULL);
+		music_info_set((const char*)list[i].path);
 
-		const char* title = sound_get_title();
-		const char* artist = sound_get_artist();
-		const double duration = sound_get_duration();
+		const char* title = music_info_get_title();
+		const char* artist = music_info_get_artist();
+		const double duration = music_info_get_duration();
 
 		GtkBuilder* music_item = load_ui("/ui/music_item");
 		GObject* row = get_object(music_item, "music_item");

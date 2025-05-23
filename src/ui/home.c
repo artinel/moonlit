@@ -29,6 +29,7 @@ void home_init(GObject* window){
 
 void clear_home_list(){
 	gtk_list_box_remove_all(GTK_LIST_BOX(home_list));
+	reset_music_list();
 }
 
 GObject* get_home_list(){

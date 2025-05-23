@@ -25,21 +25,6 @@ void sound_set(const char* music_path, void (*callback)(void)){
 	Mix_HookMusicFinished(callback);
 }
 
-const char* sound_get_title(){
-	const char* title = Mix_GetMusicTitle(music);
-	return title;
-}
-
-const char* sound_get_artist(){
-	const char* tag = Mix_GetMusicArtistTag(music);
-	return tag;
-}
-
-double sound_get_duration(){
-	double dur = Mix_MusicDuration(music);
-	return dur;
-}
-
 void sound_play(){
 	Mix_PlayMusic(music, 1);
 	is_playing = true;

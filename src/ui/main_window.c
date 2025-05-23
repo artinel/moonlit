@@ -45,6 +45,7 @@ static bool is_repeat = false;
 static int volume_level = 70;
 static GObject* cur_tab_active;
 static music_t cur_playing;
+static int playing_index;
 
 static pthread_t prog_thread;
 static double prog_position;
@@ -448,4 +449,21 @@ void set_cur_playing(music_t music){
 
 music_t get_cur_playing(){
 	return cur_playing;
+}
+
+void set_playing_index(int index){
+	playing_index = index;
+}
+
+int get_playing_index(){
+	return playing_index;
+}
+
+int get_list_size(){
+	return list_size;
+}
+
+void reset_music_list(){
+	cur_index = 0;
+	list_size = 0;	
 }

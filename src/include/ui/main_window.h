@@ -20,5 +20,9 @@ void clear_music_list();
 void set_view_empty();
 void set_cur_playing(music_t music);
 music_t get_cur_playing();
+void set_playing_index(int index);
+int get_playing_index();
+int get_list_size();
+void reset_music_list();
 
 #endif
