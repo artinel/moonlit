@@ -44,6 +44,7 @@ static int cur_index = 0;
 static bool is_repeat = false;
 static int volume_level = 70;
 static GObject* cur_tab_active;
+static music_t cur_playing;
 
 static pthread_t prog_thread;
 static double prog_position;
@@ -439,4 +440,12 @@ static void tab_search_apply_callback(GtkWidget* self){
 
 void set_view_empty(){
 	set_main_view(empty);
+}
+
+void set_cur_playing(music_t music){
+	cur_playing = music;
+}
+
+music_t get_cur_playing(){
+	return cur_playing;
 }

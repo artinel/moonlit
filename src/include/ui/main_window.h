@@ -18,5 +18,7 @@ int get_current_index();
 void set_playing_like(bool is_like);
 void clear_music_list();
 void set_view_empty();
+void set_cur_playing(music_t music);
+music_t get_cur_playing();
 
 #endif

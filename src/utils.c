@@ -201,6 +201,8 @@ void playsong(GtkWidget* self, gpointer p){
 	}else{
 		set_playing_like(false);
 	}
+
+	set_cur_playing(music);
 }
 
 void fill_listbox(GtkListBox* list_box, music_t* list, int count){
@@ -235,6 +237,10 @@ void fill_listbox(GtkListBox* list_box, music_t* list, int count){
 		GtkWidget* btn = gtk_button_new();
 		gtk_button_set_child(GTK_BUTTON(btn), GTK_WIDGET(row));
 		g_signal_connect_data(GTK_BUTTON(btn), "clicked", G_CALLBACK(playsong), GINT_TO_POINTER(i), NULL, 0);
+
+		if(list[i].id == get_cur_playing().id){
+			gtk_widget_add_css_class(GTK_WIDGET(btn), "suggested-action");
+		}
 
 		gtk_list_box_append(GTK_LIST_BOX(list_box), GTK_WIDGET(btn));
 		add_to_music_list(list[i], btn);
