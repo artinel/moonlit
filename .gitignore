@@ -54,3 +54,4 @@ dkms.conf
 *.swp
 src/resources.c
 moonlit
+docs

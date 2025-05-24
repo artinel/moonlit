@@ -4,6 +4,7 @@ CFLAGS = -g -Wall -Wextra -O3 $(shell pkg-config --cflags --libs libadwaita-1 sq
 GRESOURCE_CONFIG = gresource.xml
 GRESOURCE_TARGET = src/resources.c
 TARGET = moonlit
+DOC-CONFIG = doc-config
 
 CSOURCES = $(shell find src -type f -name "*.c")
 
@@ -20,3 +21,6 @@ clean:
 
 run:
 	./$(TARGET)
+
+docs:
+	doxygen $(DOC-CONFIG)

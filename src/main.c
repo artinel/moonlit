@@ -1,3 +1,12 @@
+/**
+* \file src/main.c
+* \brief The program's main file
+* \author Mohammad shamsi <artinel@proton.me>
+* \version 0.0.1
+* \date 2025-05-24
+* \copyright GNU Public License V3
+*/
+
 #include <libadwaita-1/adwaita.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -8,9 +17,16 @@
 #include <sound.h>
 #include <ui/main_window.h>
 
-#define APP_ID "com.artinel.moonlit"
+#define APP_ID "com.artinel.moonlit" /**< The application ID */
 
-__attribute__((constructor))
+
+/**
+ * The application constructor(Calls before the main function).
+ * Mainly used for initializing libraries and frameworks like SDL and sqlite3
+ * \sa db_init sound_init
+ * */
+
+__attribute__((constructoar))
 void constructor(){
 	db_init();
 
@@ -29,6 +45,13 @@ void constructor(){
 
 	sound_init();
 }
+
+
+/**
+ * The application destructor(Calls after the main function).
+ * Mainly used for freeing and closing libraries and frameworks like SDL and sqlite3
+ * \sa sound_exit SDL_Quit db_exit
+ * */
 
 __attribute__((destructor))
 void destructor(){
