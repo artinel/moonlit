@@ -1,3 +1,13 @@
+/**
+* \file src/utils.c
+* \brief Some helper functions to use in the program
+* \author Mohammad shamsi <artinel@proton.me>
+* \version 0.0.1
+* \date 2025-05-24
+* \copyright GNU Public License V3
+*/
+
+
 #include <libadwaita-1/adwaita.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,22 +21,32 @@
 #include <ui/main_window.h>
 #include <music_info.h>
 
-#define FILENAME_BUF_SIZE 512
+#define FILENAME_BUF_SIZE 512	/**< The size of the buffer for the music file name */
 
 
 static bool check_ext(const char* filename, const char* extension);
 static void* thread_dir_add(void* data);
 static void show_dir_add_callback(GObject* src, GAsyncResult* res, gpointer data);
 
+/** This struct is used to pass data to the directory add thread */
 struct dir_thread{
-	char* path;
-	char* ext;
-	int dir_id;
-	GObject* dialog;
-	GObject* parent;
+	char* path;		/**< The director we want to search in */
+	char* ext;		/**< The extension we want to search for */
+	int dir_id;		/**< Directory ID */
+	GObject* dialog;	/**< The select directory dialog's object */
+	GObject* parent;	/**< Parent of the dialog */
 };
 
 
+/**
+ * Load a ui file into a GtkBuilder using gtk_builder_add_from resource.
+ * First it initialize GtkBuilder using gtk_builder_new and then declare
+ * a GError* for error checking and set it no NULL then load the ui and
+ * check if GError* is NULL or not for error checking and then returns
+ * the GtkBuilder
+ * \param ui	The ui file we want to load
+ * \return	The loaded GtkBuilder
+ * */
 GtkBuilder* load_ui(const char* ui){
 	GtkBuilder* builder = gtk_builder_new();
 	GError* err = NULL;
@@ -37,10 +57,22 @@ GtkBuilder* load_ui(const char* ui){
 	return builder;
 }
 
+/**
+ * Get an object from a loaded GtkBuilder with gtk_builder_get_object
+ * \param builder	The loaded GtkBuilder
+ * \param id		The object ID in the loaded ui file
+ * \return		Returns the object with given ID from the given GtkBuilder
+ * */
 GObject* get_object(GtkBuilder* builder, const char* id){
 	return gtk_builder_get_object(builder, id);
 }
 
+
+/**
+ * Load custom css into program.
+ * \param widget	The main widget(usally window)
+ * \param css		The css file name we want to load
+ * */
 void load_css(GtkWidget *widget, char *css){
 	GtkCssProvider *provider = gtk_css_provider_new();
 	gtk_css_provider_load_from_resource(provider, css);
