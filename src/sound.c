@@ -19,10 +19,10 @@ static Mix_Music* music;			/**< The curren playing music */
 static volatile bool is_playing = false;	/**< State that if music is playing or not(paused) */
 
 /**
- * Initialize the sound library using Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+ * Initialize the sound library using Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 2048);
  * */
 void sound_init(){
-	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 640);
+	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 2048);
 }
 
 
