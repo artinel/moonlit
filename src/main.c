@@ -26,7 +26,7 @@
  * \sa db_init sound_init
  * */
 
-__attribute__((constructoar))
+__attribute__((constructor))
 void constructor(){
 	db_init();
 

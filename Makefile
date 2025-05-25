@@ -24,3 +24,8 @@ run:
 
 docs:
 	doxygen $(DOC-CONFIG)
+
+install:
+	cp $(TARGET) /usr/bin
+uninstall:
+	rm /usr/bin/$(TARGET)
